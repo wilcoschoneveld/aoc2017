@@ -1,37 +1,45 @@
 import kotlin.math.*
 import kotlin.test.assertEquals
 
-class Square(val pos: Pair<Int, Int>, val value: Int, val dir: String)
+class Square(val pos: Pair<Int, Int>, val value: Int, val dir: String) {
+    companion object {
+        // Delta positions for all neighbors
+        val NEIGHBORS = listOf(
+                Pair( 1, 0), Pair( 1,  1), Pair(0,  1), Pair(-1,  1),
+                Pair(-1, 0), Pair(-1, -1), Pair(0, -1), Pair( 1, -1))
+    }
+}
 
 
 fun nextPos(x: Int, y: Int, dir: String) = when (dir) {
-    "right" -> Triple(x + 1, y, if ((x + 1) > -y) "up" else dir)
-    "up" -> Triple(x, y + 1, if ((y + 1) >= x) "left" else dir)
-    "left" -> Triple(x - 1, y, if ((x - 1) <= -y) "down" else dir)
-    else -> Triple(x, y - 1, if ((y - 1) <= x) "right" else dir)
+    // Determine next position from given position in spiral pattern
+    "right" -> Triple((x + 1), y, if ((x + 1) > -y) "up" else dir)
+    "up" -> Triple(x, (y + 1), if ((y + 1) >= x) "left" else dir)
+    "left" -> Triple((x - 1), y, if ((x - 1) <= -y) "down" else dir)
+    else -> Triple(x, (y - 1), if ((y - 1) <= x) "right" else dir)
 }
 
 
 fun grid(): Sequence<Square> {
+    // Start in center (x: 0, y: 0) of grid with value 1
     val start = Square(Pair(0, 0), 1, "right")
+
+    // Create a map to store squares based on position
     val map = hashMapOf(start.pos to start)
 
+    // Return the spiral pattern as a sequence starting from the center square
     return generateSequence(start) {
+        // Determine next position from previous square
         val (x, y, dir) = nextPos(it.pos.first, it.pos.second, it.dir)
 
-        val value =
-                (map[Pair(x + 1, y    )]?.value ?: 0) +
-                (map[Pair(x + 1, y + 1)]?.value ?: 0) +
-                (map[Pair(x    , y + 1)]?.value ?: 0) +
-                (map[Pair(x - 1, y + 1)]?.value ?: 0) +
-                (map[Pair(x - 1, y    )]?.value ?: 0) +
-                (map[Pair(x - 1, y - 1)]?.value ?: 0) +
-                (map[Pair(x    , y - 1)]?.value ?: 0) +
-                (map[Pair(x + 1, y - 1)]?.value ?: 0)
+        // Calculate value by summing values of all existing neighbors
+        val value = Square.NEIGHBORS.sumBy { (dx, dy) -> map[Pair(x + dx, y + dy)]?.value ?: 0 }
 
+        // Create square and add to map
         val square = Square(Pair(x, y), value, dir)
         map[square.pos] = square
 
+        // Return new square
         square
     }
 }
