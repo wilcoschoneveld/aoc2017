@@ -4,45 +4,29 @@ import kotlin.test.assertEquals
 class Square(val pos: Pair<Int, Int>, val value: Int, val dir: String)
 
 
+fun nextPos(x: Int, y: Int, dir: String) = when (dir) {
+    "right" -> Triple(x + 1, y, if ((x + 1) > -y) "up" else dir)
+    "up" -> Triple(x, y + 1, if ((y + 1) >= x) "left" else dir)
+    "left" -> Triple(x - 1, y, if ((x - 1) <= -y) "down" else dir)
+    else -> Triple(x, y - 1, if ((y - 1) <= x) "right" else dir)
+}
+
+
 fun grid(): Sequence<Square> {
     val start = Square(Pair(0, 0), 1, "right")
     val map = hashMapOf(start.pos to start)
 
-    return generateSequence(start) { current ->
-        val x: Int
-        val y: Int
-        val dir: String
+    return generateSequence(start) {
+        val (x, y, dir) = nextPos(it.pos.first, it.pos.second, it.dir)
 
-        when (current.dir) {
-            "right" -> {
-                x = current.pos.first + 1
-                y = current.pos.second
-                dir = if (x > -y) "up" else "right"
-            }
-            "up" -> {
-                x = current.pos.first
-                y = current.pos.second + 1
-                dir = if (y >= x) "left" else "up"
-            }
-            "left" -> {
-                x = current.pos.first - 1
-                y = current.pos.second
-                dir = if (x <= -y) "down" else "left"
-            }
-            else -> {
-                x = current.pos.first
-                y = current.pos.second - 1
-                dir = if (y <= x) "right" else "down"
-            }
-        }
-
-        val value = (map[Pair(x + 1, y)]?.value ?: 0) +
+        val value =
+                (map[Pair(x + 1, y    )]?.value ?: 0) +
                 (map[Pair(x + 1, y + 1)]?.value ?: 0) +
-                (map[Pair(x, y + 1)]?.value ?: 0) +
+                (map[Pair(x    , y + 1)]?.value ?: 0) +
                 (map[Pair(x - 1, y + 1)]?.value ?: 0) +
-                (map[Pair(x - 1, y)]?.value ?: 0) +
+                (map[Pair(x - 1, y    )]?.value ?: 0) +
                 (map[Pair(x - 1, y - 1)]?.value ?: 0) +
-                (map[Pair(x, y - 1)]?.value ?: 0) +
+                (map[Pair(x    , y - 1)]?.value ?: 0) +
                 (map[Pair(x + 1, y - 1)]?.value ?: 0)
 
         val square = Square(Pair(x, y), value, dir)
