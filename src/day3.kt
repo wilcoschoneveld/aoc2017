@@ -1,7 +1,12 @@
 import kotlin.math.*
 import kotlin.test.assertEquals
 
-class Square(val pos: Pair<Int, Int>, val value: Int, val dir: String) {
+
+enum class Direction {
+    NORTH, SOUTH, WEST, EAST
+}
+
+class Square(val pos: Pair<Int, Int>, val value: Int, val dir: Direction) {
     companion object {
         // Delta positions for all neighbors
         val NEIGHBORS = listOf(
@@ -11,18 +16,18 @@ class Square(val pos: Pair<Int, Int>, val value: Int, val dir: String) {
 }
 
 
-fun nextPos(x: Int, y: Int, dir: String) = when (dir) {
+fun nextPos(x: Int, y: Int, dir: Direction) = when (dir) {
     // Determine next position from given position in spiral pattern
-    "right" -> Triple((x + 1), y, if ((x + 1) > -y) "up" else dir)
-    "up" -> Triple(x, (y + 1), if ((y + 1) >= x) "left" else dir)
-    "left" -> Triple((x - 1), y, if ((x - 1) <= -y) "down" else dir)
-    else -> Triple(x, (y - 1), if ((y - 1) <= x) "right" else dir)
+    Direction.EAST  -> Triple((x + 1), y, if ((x + 1) >  -y) Direction.NORTH else dir)
+    Direction.NORTH -> Triple(x, (y + 1), if ((y + 1) >=  x) Direction.WEST  else dir)
+    Direction.WEST  -> Triple((x - 1), y, if ((x - 1) <= -y) Direction.SOUTH else dir)
+    Direction.SOUTH -> Triple(x, (y - 1), if ((y - 1) <=  x) Direction.EAST  else dir)
 }
 
 
 fun grid(): Sequence<Square> {
     // Start in center (x: 0, y: 0) of grid with value 1
-    val start = Square(Pair(0, 0), 1, "right")
+    val start = Square(Pair(0, 0), 1, Direction.EAST)
 
     // Create a map to store squares based on position
     val map = hashMapOf(start.pos to start)
