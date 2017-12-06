@@ -11,20 +11,11 @@ fun redistribute(config: List<Int>): List<Int> {
     // Throw an assertion error if the maximum could not be found (list should never be empty)
     max ?: throw AssertionError("Could not find max in " + updated)
 
-    // Variables to keep track of redistribution
-    var i = max.index
-    var left = updated[i]
-    updated[i] = 0
+    // Remove all memory from the maximum block
+    updated[max.index] = 0
 
-    // While there is 'memory' left to redistribute
-    while (left > 0) {
-        // Move to the next block and wrap around if needed
-        i = (i + 1) % updated.size
-
-        // Increment the block and remove one from the remaining stack
-        updated[i] += 1
-        left -= 1
-    }
+    // Redistribute all memory, starting from the next block and continuing on
+    (1..max.value).map { (max.index + it) % updated.size } .forEach { updated[it] += 1 }
 
     // Return the redistributed memory, will be cast to immutable list
     return updated
@@ -40,13 +31,10 @@ fun numCycles(config: List<Int>, loopOnly: Boolean = false): Int {
         updated = redistribute(updated)
 
         // Check if current distribution has already been seen before
-        val before = seen[updated]
-
-        // If it was seen before
-        if (before != null) {
+        seen[updated]?.let {
             // Return total number of cycles or only the loop size
             return when(loopOnly) {
-                true -> seen.size - before
+                true -> seen.size - it
                 else -> seen.size
             }
         }
