@@ -1,9 +1,14 @@
 import java.io.File
 import kotlin.test.assertEquals
 
-fun scoreGroups(input: String): Int {
+
+fun scoreGroups(input: String) = evalInput(input).first
+fun countGarbage(input: String) = evalInput(input).second
+
+fun evalInput(input: String): Pair<Int, Int> {
     var depth = 0
     var score = 0
+    var trash = 0
     var garbage = false
     var skip = false
 
@@ -18,17 +23,18 @@ fun scoreGroups(input: String): Int {
             continue
         }
 
-        if (char == '<') {
-            garbage = true
-            continue
-        }
-
         if (char == '>') {
             garbage = false
             continue
         }
 
         if (garbage) {
+            trash += 1
+            continue
+        }
+
+        if (char == '<') {
+            garbage = true
             continue
         }
 
@@ -44,7 +50,7 @@ fun scoreGroups(input: String): Int {
         }
     }
 
-    return score
+    return Pair(score, trash)
 }
 
 
@@ -58,7 +64,16 @@ fun main(args: Array<String>) {
     assertEquals(9, scoreGroups("{{<!!>},{<!!>},{<!!>},{<!!>}}"))
     assertEquals(3, scoreGroups("{{<a!>},{<a!>},{<a!>},{<ab>}}"))
 
+    assertEquals(0, countGarbage("<>"))
+    assertEquals(17, countGarbage("<random characters>"))
+    assertEquals(3, countGarbage("<<<<>"))
+    assertEquals(2, countGarbage("<{!>}>"))
+    assertEquals(0, countGarbage("<!!>"))
+    assertEquals(0, countGarbage("<!!!>>"))
+    assertEquals(10, countGarbage("<{o\"i!a,<{i<a>"))
+
     val input = File("data/day9.txt").readLines().first()
 
     println(scoreGroups(input))
+    println(countGarbage(input))
 }
