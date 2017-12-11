@@ -13,40 +13,14 @@ fun evalInput(input: String): Pair<Int, Int> {
     var skip = false
 
     for (char in input) {
-        if (skip) {
-            skip = false
-            continue
-        }
-
-        if (char == '!') {
-            skip = true
-            continue
-        }
-
-        if (char == '>') {
-            garbage = false
-            continue
-        }
-
-        if (garbage) {
-            trash += 1
-            continue
-        }
-
-        if (char == '<') {
-            garbage = true
-            continue
-        }
-
-        if (char == '{') {
-            depth += 1
-            continue
-        }
-
-        if (char == '}') {
-            score += depth
-            depth -= 1
-            continue
+        when {
+            skip        -> skip = false
+            char == '!' -> skip = true
+            char == '>' -> garbage = false
+            garbage     -> trash += 1
+            char == '<' -> garbage = true
+            char == '{' -> depth += 1
+            char == '}' -> { score += depth; depth -= 1 }
         }
     }
 
