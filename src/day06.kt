@@ -48,7 +48,7 @@ fun main(args: Array<String>) {
     assertEquals(5, numCycles(listOf(0, 2, 7, 0)))
     assertEquals(4, numCycles(listOf(0, 2, 7, 0), true))
 
-    val config = File("data/day6.txt").readLines().first().split("\t").map { it.toInt() }
+    val config = File("data/day06.txt").readLines().first().split("\t").map { it.toInt() }
 
     println(numCycles(config))
     println(numCycles(config, true))

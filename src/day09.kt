@@ -46,7 +46,7 @@ fun main(args: Array<String>) {
     assertEquals(0, countGarbage("<!!!>>"))
     assertEquals(10, countGarbage("<{o\"i!a,<{i<a>"))
 
-    val input = File("data/day9.txt").readLines().first()
+    val input = File("data/day09.txt").readLines().first()
 
     println(scoreGroups(input))
     println(countGarbage(input))

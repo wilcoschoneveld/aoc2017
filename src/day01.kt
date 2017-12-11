@@ -31,7 +31,7 @@ fun captcha2(seq: String): Int {
     // Return numeric sum of characters which are equal in both lists
     return seq.zip(seq2)
             .filter { it.first == it.second }
-            .map { it.toString().toInt() }
+            .map { it.first.toString().toInt() }
             .sum()
 }
 
@@ -42,7 +42,7 @@ fun main(args: Array<String>) {
     assertEquals(0, captcha("1234"))
     assertEquals(9, captcha("91212129"))
 
-    val data = File("data/day1.txt").readLines().first()
+    val data = File("data/day01.txt").readLines().first()
 
     print(captcha2(data))
 }

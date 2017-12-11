@@ -25,6 +25,6 @@ fun main(args: Array<String>) {
     assertEquals(5, steps(listOf(0, 3, 0, 1, -3)))
     assertEquals(10, steps(listOf(0, 3, 0, 1, -3), true))
 
-    println(steps(File("data/day5.txt").readLines().map { it.toInt() }))
-    println(steps(File("data/day5.txt").readLines().map { it.toInt() }, true))
+    println(steps(File("data/day05.txt").readLines().map { it.toInt() }))
+    println(steps(File("data/day05.txt").readLines().map { it.toInt() }, true))
 }

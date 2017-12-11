@@ -21,7 +21,7 @@ fun main(args: Array<String>) {
     assertEquals(false, valid("aa bb cc dd aa"))
     assertEquals(true, valid("aa bb cc dd aaa"))
 
-    println(File("data/day4.txt").readLines().filter { valid(it) }.size)
+    println(File("data/day04.txt").readLines().filter { valid(it) }.size)
 
     assertEquals(true, valid2("abcde fghij"))
     assertEquals(false, valid2("abcde xyz ecdab"))
@@ -29,5 +29,5 @@ fun main(args: Array<String>) {
     assertEquals(true, valid2("iiii oiii ooii oooi oooo"))
     assertEquals(false, valid2("oiii ioii iioi iiio"))
 
-    println(File("data/day4.txt").readLines().filter { valid2(it) }.size)
+    println(File("data/day04.txt").readLines().filter { valid2(it) }.size)
 }

@@ -38,7 +38,7 @@ fun main(args: Array<String>) {
     val sheet2 = listOf(listOf(5, 9, 2, 8), listOf(9, 4, 7, 3), listOf(3, 8, 6, 5))
     assertEquals(9, checksum2(sheet2))
 
-    val lines = File("data/day2.txt").readLines()
+    val lines = File("data/day02.txt").readLines()
 
     val rows = lines.map { it.split("\t").map { it.toInt() } }
 

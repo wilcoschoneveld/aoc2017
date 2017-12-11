@@ -64,7 +64,7 @@ fun main(args: Array<String>) {
     assertEquals(1, largestValue(instructions))
     assertEquals(10, largestValue(instructions, false))
 
-    val data = File("data/day8.txt").readLines()
+    val data = File("data/day08.txt").readLines()
 
     println(largestValue(data))
     println(largestValue(data, false))

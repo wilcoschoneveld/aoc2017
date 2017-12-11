@@ -101,7 +101,7 @@ fun main(args: Array<String>) {
     assertEquals("tknk", testRoot.name)
     assertFailsWith(AssertionError::class, { assertBalanceTree(testRoot) })
 
-    val data = File("data/day7.txt").readLines()
+    val data = File("data/day07.txt").readLines()
 
     val root = buildTree(data)
     println(root.name)
