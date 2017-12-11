@@ -3,12 +3,11 @@ import kotlin.math.absoluteValue
 import kotlin.test.assertEquals
 
 
-fun distance(path: List<String>): Int {
-    var x = 0
-    var y = 0
-    var z = 0
+fun distance(path: List<String>, part2: Boolean = false): Int {
+    var (x, y, z) = listOf(0, 0, 0)
+    var max = 0
 
-    // https://www.redblobgames.com/grids/hexagons/#coordinates-cube
+    // From: https://www.redblobgames.com/grids/hexagons/#coordinates-cube
     for (step in path) {
         when (step) {
             "n"  -> { y += 1; z -= 1 }
@@ -18,10 +17,15 @@ fun distance(path: List<String>): Int {
             "sw" -> { z += 1; x -= 1 }
             "nw" -> { y += 1; x -= 1 }
         }
+
+        // From: https://www.redblobgames.com/grids/hexagons/#distances-cube
+        val distance = maxOf(x.absoluteValue, y.absoluteValue, z.absoluteValue)
+
+        // For part 2 keep track of maximum distance ever reached, otherwise current dist
+        max = if (part2 && max > distance) max else distance
     }
 
-    // https://www.redblobgames.com/grids/hexagons/#distances-cube
-    return maxOf(x.absoluteValue, y.absoluteValue, z.absoluteValue)
+    return max
 }
 
 
@@ -31,5 +35,8 @@ fun main(args: Array<String>) {
     assertEquals(2, distance(listOf("ne", "ne", "s", "s")))
     assertEquals(3, distance(listOf("se", "sw", "se", "sw", "sw")))
 
-    println(distance(File("data/day11.txt").readLines().first().split(",")))
+    val data = File("data/day11.txt").readLines().first().split(",")
+
+    println(distance(data))
+    println(distance(data, true))
 }
