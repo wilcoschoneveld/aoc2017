@@ -48,11 +48,7 @@ fun knotHash(input: String): String {
         }
     }
 
-    return (0 until 16)
-            .map { circle.drop(it * 16).take(16) }
-            .map { xor(it) }
-            .map { it.toHex() }
-            .joinToString("")
+    return circle.chunked(16).map { xor(it).toHex() }.joinToString("")
 }
 
 
