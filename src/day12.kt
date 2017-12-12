@@ -3,6 +3,10 @@ import kotlin.test.assertEquals
 
 val pattern = Regex("(\\d+) <-> ([\\d, ]+)")
 
+typealias PipeMap = Map<Int, List<Int>>
+
+fun buildMap(input: List<String>) = input.map { readPipe(it) }.toMap()
+
 fun readPipe(line: String): Pair<Int, List<Int>> {
     val match = pattern.matchEntire(line)
 
@@ -15,9 +19,8 @@ fun readPipe(line: String): Pair<Int, List<Int>> {
 }
 
 
-fun countPrograms(input: List<String>): Int {
-    val pipes = input.map { readPipe(it) }.toMap()
-    val toCheck = hashSetOf(0)
+fun findGroup(pipes: PipeMap, start: Int): Set<Int> {
+    val toCheck = hashSetOf(start)
     val checked = hashSetOf<Int>()
 
     while (toCheck.isNotEmpty()) {
@@ -34,7 +37,22 @@ fun countPrograms(input: List<String>): Int {
         checked.add(program)
     }
 
-    return checked.size
+    return checked
+}
+
+fun findGroups(pipes: PipeMap): List<Set<Int>> {
+    val unchecked = pipes.keys.toHashSet()
+    val groups = mutableListOf<Set<Int>>()
+
+    while (unchecked.isNotEmpty()) {
+        val checked = findGroup(pipes, unchecked.first())
+
+        groups.add(checked)
+
+        unchecked.removeAll(checked)
+    }
+
+    return groups
 }
 
 
@@ -51,9 +69,14 @@ fun main(args: Array<String>) {
 
     assertEquals(Pair(1, listOf(1)), readPipe("1 <-> 1"))
     assertEquals(Pair(2, listOf(0, 3, 4)), readPipe("2 <-> 0, 3, 4"))
-    assertEquals(6, countPrograms(input))
 
-    val data = File("data/day12.txt").readLines()
+    val testPipes = buildMap(input)
 
-    println(countPrograms(data))
+    assertEquals(6, findGroups(testPipes).first().size)
+    assertEquals(2, findGroups(testPipes).size)
+
+    val pipes = buildMap(File("data/day12.txt").readLines())
+
+    println(findGroups(pipes).first().size)
+    println(findGroups(pipes).size)
 }
