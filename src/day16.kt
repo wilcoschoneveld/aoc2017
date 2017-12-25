@@ -3,8 +3,8 @@ import kotlin.coroutines.experimental.buildSequence
 import kotlin.test.assertEquals
 
 val spinRegex = Regex("s(\\d+)")
-val exchangeRegex = Regex("x(\\d+)\\/(\\d+)")
-val partnerRegex = Regex("p(\\w)\\/(\\w)")
+val exchangeRegex = Regex("x(\\d+)/(\\d+)")
+val partnerRegex = Regex("p(\\w)/(\\w)")
 
 fun dance(start: String, moves: List<String>) = buildSequence {
     var next = start
@@ -66,4 +66,22 @@ fun main(args: Array<String>) {
     val moves = File("data/day16.txt").readLines().first().split(",")
     val end = dance(start, moves).last()
     println(end)
+
+    // It would take a long time to perform 1 billion dances, so lets try to find a cycle
+    val dances = mutableListOf(start)
+    var stage = start
+
+    while (true) {
+        // Perform the full dance again
+        stage = dance(stage, moves).last()
+
+        // If current arrangement was already seen before, cycle is found
+        if (dances.contains(stage)) break
+
+        // Add to possible dances
+        dances.add(stage)
+    }
+
+    // Calculate the remainder of 1 billion dances with the cycle, and report the arrangement
+    println(dances[1000000000 % dances.size])
 }
