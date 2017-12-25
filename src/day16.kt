@@ -45,12 +45,7 @@ fun exchange(input: String, posA: Int, posB: Int): String {
     return output.joinToString("")
 }
 
-fun partner(input: String, itemA: Char, itemB: Char): String {
-    val posA = input.indexOfFirst { it == itemA }
-    val posB = input.indexOfFirst { it == itemB }
-
-    return exchange(input, posA, posB)
-}
+fun partner(input: String, itemA: Char, itemB: Char) = exchange(input, input.indexOf(itemA), input.indexOf(itemB))
 
 fun main(args: Array<String>) {
     assertEquals("eabcd", spin("abcde", 1))
